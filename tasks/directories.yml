@@ -5,7 +5,9 @@
   ansible.builtin.file:
     state: "{{ container_directories_state }}"
     path: "{{ directory.path }}"
-    mode: "{{ container_directories_mode }}"
+#    mode: "{{  directory.mode if directory.mode is defined else container_directories_mode }}"
+#    mode: "{{ container_directories_mode }}"
+    mode: "{{ directory.mode }}"
     owner: "{{ directory.owner }}"
     group: "{{ directory.group }}"
     seuser: system_u
