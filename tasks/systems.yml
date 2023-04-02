@@ -1,0 +1,49 @@
+---
+
+#- name: "{{ container_mode }} | systems | manage variable XDG_RUNTIME_DIR in ~/.bashrc.d/xdg_runtime_dir.rc"
+#  when: container_state == 'present'
+#  become: true
+#  ansible.builtin.copy:
+#    dest: "{{ user_owner_service_info.home }}/.bashrc.d/xdg_runtime_dir.rc"
+#    content: "export XDG_RUNTIME_DIR=/run/user/$UID"
+#    owner: "{{ container_user_owner_service }}"
+#    group: "{{ container_user_group_service }}"
+
+# Persistent DBUS session
+- name: "{{ container_mode }} | systems | check if user is lingering"
+  become: true
+  stat:
+    path: "/var/lib/systemd/linger/{{ container_user_owner_service }}"
+  register: user_owner_service_lingering
+
+- name: "{{ container_mode }} | systems | enable lingering is needed"
+  when: not user_owner_service_lingering.stat.exists and container_state == 'present'
+  become: true
+  command: "loginctl enable-linger {{ container_user_owner_service }}"
+
+- name: "{{ container_mode }} | systems | disable lingering is needed"
+  when: container_state == 'absent'
+  become: true
+  command: "loginctl disable-linger {{ container_user_owner_service }}"
+
+- name: "{{ container_mode }} | systems | create /etc/systemd/system/user@.service.d folder"
+  become: true
+  ansible.builtin.file:
+    path: "/etc/systemd/system/user@.service.d"
+    state: "{{ container_directories_state }}"
+
+- name: "{{ container_mode }} | systems | copy delegate.conf file"
+  when: container_state == 'present'
+  become: true
+  ansible.builtin.copy:
+    src: delegate.conf
+    dest: "/etc/systemd/system/user@.service.d/delegate.conf"
+    owner: root
+    group: root
+    mode: 0640
+
+- name: "{{ container_mode }} | systems | daemon-reload"
+  when: container_state == 'present'
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true

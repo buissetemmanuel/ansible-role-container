@@ -1,0 +1,8 @@
+---
+
+- name: "{{ container_mode }} | packages"
+  become: true
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: "{{ container_state }}"
+  loop: "{{ container_packages_mandatories }}"

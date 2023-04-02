@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  vars_files:
+    - vars/container.yml
+  tasks:
+    - name: Include buissetemmanuel.container
+      ansible.builtin.include_role:
+        name: buissetemmanuel.container

@@ -1,0 +1,15 @@
+server {
+  listen                88;
+
+  location /healthcheck {
+    access_log	off;
+    error_log	off;
+    return 200 '{{ updates_version }}';
+  }
+
+  location / {
+    access_log off;
+    error_log	off;
+    return 404 '404 Not Found';
+  }
+}

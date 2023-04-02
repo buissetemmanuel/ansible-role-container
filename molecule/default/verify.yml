@@ -1,0 +1,65 @@
+---
+
+- name: Verify
+  hosts: all
+  vars_files:
+    - ../../defaults/main.yml
+    - vars/container_verify.yml
+  tasks:
+    - name: "Verify | set fact __container_service_name"
+      ansible.builtin.set_fact:
+        __container_service_name: "{{ container_pod_name }}"
+ 
+    - name: "Verify | check systemd"
+      become: true
+      become_user: "{{ container_user_owner_service }}"
+      become_method: machinectl
+      become_exe: "sudo machinectl"
+      ansible.builtin.systemd:
+        name: "{{ __container_service_name }}"
+        scope: user
+      register: __container_service_name_status
+ 
+    - name: "Verify | check if the service '{{ __container_service_name }}' is inactive"
+      ansible.builtin.assert:
+        that: __container_service_name_status.status.ActiveState == "active"
+        fail_msg: "{{ container_pod_name }} service is inactive, why? It should have been there!"
+        success_msg: "{{ container_pod_name }} service is active"
+ 
+    - name: "Verify | check container response"
+      ansible.builtin.uri:
+        url: http://localhost:8088/healthcheck
+        return_content: true
+      register: container_response
+      failed_when: "'{{ updates_version }}' not in container_response.content"
+
+- name: Verify updates
+  hosts: all
+  vars_files:
+    - ../../defaults/main.yml
+    - vars/container_verify_updates.yml
+  tasks:
+    - name: Include buissetemmanuel.container
+      ansible.builtin.include_role:
+        name: buissetemmanuel.container
+
+    - name: Flush handlers
+      meta: flush_handlers
+
+    - name: "Verify | check container response"
+      ansible.builtin.uri:
+        url: http://localhost:8088/healthcheck
+        return_content: true
+      register: container_response
+      failed_when: updates_version not in container_response.content
+
+- name: Verify uninstall
+  hosts: all
+  vars_files:
+    - ../../defaults/main.yml
+    - vars/container.yml
+    - vars/container_verify_uninstall.yml
+  tasks:
+    - name: Include buissetemmanuel.container
+      ansible.builtin.include_role:
+        name: buissetemmanuel.container

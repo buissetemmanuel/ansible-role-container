@@ -1,0 +1,58 @@
+---
+
+- name: "{{ container_mode }} | files |  mandatories templates and from outside the role"
+  when: container_state == 'present'
+  become: true
+  ansible.builtin.template:
+    src: "{{ template.src }}"
+    dest: "{{ template.dest }}"
+    mode: "{{ container_files_mode }}"
+    owner: "{{ template.owner }}"
+    group: "{{ template.group }}"
+    seuser: system_u
+    serole: object_r
+    setype: container_file_t
+  loop: "{{ container_templates_mandatories + container_templates }}"
+  loop_control:
+    loop_var: template
+    label: "{{ template.src }} -> {{ template.dest }}"
+  notify:
+    - Restart service
+
+- name: "{{ container_mode }} | files | services templates"
+  when: container_state == 'present'
+  become: true
+  become_user: "{{ container_user_owner_service }}"
+  become_method: machinectl
+  become_exe: "sudo machinectl"
+  ansible.builtin.template:
+    src: "{{ template.src }}"
+    dest: "{{ template.dest }}"
+    mode: "{{ container_files_mode }}"
+    owner: "{{ template.owner }}"
+    group: "{{ template.group }}"
+  loop: "{{ container_services_templates_mandatories }}"
+  loop_control:
+    loop_var: template
+    label: "{{ template.src }} -> {{ template.dest }}"
+  notify: 
+    - Restart service
+
+- name: "{{ container_mode }} | files | from outside the role"
+  when: container_state == 'present'
+  become: true
+  ansible.builtin.copy:
+    src: "{{ file.src }}"
+    dest: "{{ file.dest }}"
+    mode: "{{ container_files_mode }}"
+    owner: "{{ file.owner }}"
+    group: "{{ file.group }}"
+    seuser: system_u
+    serole: object_r
+    setype: container_file_t
+  loop: "{{ container_files }}"
+  loop_control:
+    loop_var: file
+    label: "{{ file.src }} -> {{ file.dest }}"
+  notify: 
+    - Restart service

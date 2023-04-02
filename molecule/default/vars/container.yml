@@ -1,0 +1,59 @@
+---
+
+# Manage users and groups
+users_managed: true
+users_groups:
+  - name: container_user_group
+  - name: container_user_group_service
+  - name: container_user_group_logs
+users_users:
+  - name: container_user_owner
+    group: container_user_group
+    create_home: true
+  - name: container_user_owner_service
+    group: container_user_group_service
+
+# Manage packages
+packages_managed: true
+
+# Manage systems
+systems_managed: true
+
+# Manage container
+container_install_podman: true
+container_directories:
+  - path: "{{ container_pod_home_dir }}/converge"
+    owner: "{{ container_user_owner }}"
+    group: "{{ container_user_group_service }}"
+
+container_templates:
+  - src: "nginx.default.conf.j2"
+    dest: "{{ container_pod_etc_dir }}/nginx.default.conf"
+    owner: "{{ container_user_owner }}"
+    group: "{{ container_user_group_service }}"
+
+updates_version: "latest"
+
+container_pod_containers:
+  - name: container_name_a
+    image_name: docker.io/nginx
+    image_tag: "{{ updates_version }}"
+    description: Web host A
+    ports:
+      - containerPort: 88
+        hostPort: 8088
+        protocol: TCP
+    resources:
+      limits:
+        cpu: "1"
+      requests:
+        cpu: "0.5"
+    volumeMounts:
+      - mountPath: /etc/nginx/conf.d/default.conf:ro,z
+        name: nginx-default-conf
+
+container_pod_volumes:
+  - name: nginx-default-conf
+    hostPath:
+      path: "{{ container_pod_etc_dir }}/nginx.default.conf"
+

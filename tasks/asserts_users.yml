@@ -1,0 +1,161 @@
+---
+
+- name: "{{ container_mode }} | users | user_groups"
+  when: users_groups is defined
+  block:
+    - name: "{{ container_mode }} | users | users_groups is iterable"
+      ansible.builtin.assert:
+        that: users_groups is iterable
+        quiet: yes
+    
+    - name: "{{ container_mode }} | users | group.name "
+      ansible.builtin.assert:
+        that:
+          - item.name is defined
+          - item.name is string
+        quiet: yes
+      loop: "{{ users_groups }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "{{ container_mode }} | users | group.state "
+      when: item.state is defined
+      ansible.builtin.assert:
+        that:
+          - item.state is string
+          - item.state in [ "absent", "present" ]
+        quiet: yes
+      loop: "{{ users_groups }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "{{ container_mode }} | users | group.gid "
+      when: item.gid is defined
+      ansible.builtin.assert:
+        that:
+          - item.gid is number
+          - item.gid > 0
+        quiet: yes
+      loop: "{{ users_groups }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "{{ container_mode }} | users | group.system "
+      when: item.system is defined
+      ansible.builtin.assert:
+        that:
+          - item.system is boolean
+        quiet: yes
+      loop: "{{ users_groups }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+- name: "{{ container_mode }} | users | users_users"
+  when: users_users is defined
+  block:
+    - name: "{{ container_mode }} | users | users_users is iterable"
+      ansible.builtin.assert:
+        that: users_users is iterable
+        quiet: yes
+
+    - name: "{{ container_mode }} | users | user.name "
+      ansible.builtin.assert:
+        that:
+          - item.name is defined
+          - item.name is string
+        quiet: yes
+      loop: "{{ users_users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "{{ container_mode }} | users | user.state "
+      when: item.state is defined
+      ansible.builtin.assert:
+        that:
+          - item.state is string
+          - item.state in [ "absent", "present" ]
+        quiet: yes
+      loop: "{{ users_users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "{{ container_mode }} | users | user.uid "
+      when: item.uid is defined
+      ansible.builtin.assert:
+        that:
+          - item.uid is number
+          - item.uid >= 0
+        quiet: yes
+      loop: "{{ users_users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "{{ container_mode }} | users | user.system "
+      when: item.system is defined
+      ansible.builtin.assert:
+        that:
+          - item.system is boolean
+        quiet: yes
+      loop: "{{ users_users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "{{ container_mode }} | users | user.comment "
+      when: item.comment is defined
+      ansible.builtin.assert:
+        that:
+          - item.comment is string
+        quiet: yes
+      loop: "{{ users_users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "{{ container_mode }} | users | user.create_home "
+      when: item.create_home is defined
+      ansible.builtin.assert:
+        that:
+          - item.create_home is boolean
+        quiet: yes
+      loop: "{{ users_users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "{{ container_mode }} | users | user.group "
+      when: item.group is defined
+      ansible.builtin.assert:
+        that:
+          - item.group is string
+        quiet: yes
+      loop: "{{ users_users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "{{ container_mode }} | users | user.groups "
+      when: item.groups is defined
+      ansible.builtin.assert:
+        that:
+          - item.groups is string
+        quiet: yes
+      loop: "{{ users_users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "{{ container_mode }} | users | user.home "
+      when: item.home is defined
+      ansible.builtin.assert:
+        that:
+          - item.home is string
+        quiet: yes
+      loop: "{{ users_users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "{{ container_mode }} | users | user.shell"
+      when: item.shell is defined
+      ansible.builtin.assert:
+        that:
+          - item.shell is string
+        quiet: yes
+      loop: "{{ users_users }}"
+      loop_control:
+        label: "{{ item.name }}"

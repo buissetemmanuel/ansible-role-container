@@ -1,0 +1,10 @@
+---
+
+- name: "{{ container_mode }} | check images exists on remote registry"
+  podman_manifest:
+    name: "{{ container.image_name }}"
+    tag: "{{ container.image_tag }}"
+  loop: "{{ container_pod_containers }}"
+  loop_control:
+    loop_var: container
+    label: "{{ container.image_name }}:{{ container.image_tag }}"

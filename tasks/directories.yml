@@ -1,0 +1,29 @@
+---
+
+- name: "{{ container_mode }} | directories | for pod"
+  become: true
+  ansible.builtin.file:
+    state: "{{ container_directories_state }}"
+    path: "{{ directory.path }}"
+    mode: "{{ container_directories_mode }}"
+    owner: "{{ directory.owner }}"
+    group: "{{ directory.group }}"
+    seuser: system_u
+    serole: object_r
+    setype: container_file_t
+  loop: "{{ container_directories_mandatories }}"
+  loop_control:
+    loop_var: directory
+    label: "{{ directory.path }}"
+
+- name: "{{ container_mode }} | directories | for services pod"
+  become: true
+  become_user: "{{ container_user_owner_service }}"
+  become_method: machinectl
+  become_exe: "sudo machinectl"
+  ansible.builtin.file:
+    state: "{{ container_directories_state }}"
+    path: "{{ container_pod_service_dir }}"
+    mode: "{{ container_directories_mode }}"
+    owner: "{{ container_user_owner_service }}"
+    group: "{{ container_user_group_service }}"

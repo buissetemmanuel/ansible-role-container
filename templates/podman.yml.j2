@@ -1,0 +1,128 @@
+# {{ ansible_managed }}
+# https://docs.podman.io/en/latest/markdown/podman-kube-play.1.html#podman-kube-play-support
+apiVersion: {{ container_pod_apiVersion | default('v1') }}
+kind: Pod
+metadata:
+{% if container_pod_labels is defined and container_pod_labels|length>0 %}
+  labels:
+{% for item in container_pod_labels | dict2items %}
+    {{ item.key }}: {{ item.value }}
+{% endfor %}
+{% endif %}
+  name: {{ container_pod_name }}
+spec:
+{% if container_pod_containers is defined %}
+  containers:
+{% for container in container_pod_containers %}
+    - name: {{ container.name }}
+{% if container.args is defined %}
+      args:
+{% for arg in container.args.items() %}
+        - {{ arg }}
+{% endfor %}
+{% endif %}
+{% if container.command is defined %}
+      command:
+{% for cmd in container.command.items() %}
+        - {{ cmd }}
+{% endfor %}
+{% endif %}
+{% if container.env is defined %}
+      env:
+{% for key, value in container.env.items() %}
+        - name: {{ key }}
+          value: {{ value }}
+{% endfor %}
+{% endif %}
+{% if container.image_name is defined %}
+      image: {{ container.image_name }}:{{ container.image_tag | default('latest') }}
+{% endif %}
+{% if container.ports is defined %}
+      ports:
+{% for port in container.ports %}
+        - containerPort: {{ port.containerPort }}
+{% if port.hostIP is defined %}
+          hostIP: {{ port.hostIP }}
+{% endif %}
+{% if port.hostPort is defined %}
+          hostPort: {{ port.hostPort }}
+{% endif %}
+{% if port.name is defined %}
+          name: {{ port.name }}
+{% endif %}
+{% if port.protocol is defined %}
+          protocol: {{ port.protocol }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if container.resources is defined %}
+      resources:
+{% if container.resources.limits is defined %}
+        limits:
+{% if container.resources.limits.cpu is defined %}
+          cpu: {{ container.resources.limits.cpu }}
+{% endif %}
+{% if container.resources.limits.memory is defined %}
+          memory: {{ container.resources.limits.memory }}
+{% endif %}
+{% endif %}
+{% if container.resources.requests is defined %}
+        requests:
+{% if container.resources.requests.cpu is defined %}
+          cpu: {{ container.resources.requests.cpu }}
+{% endif %}
+{% if container.resources.requests.memory is defined %}
+          memory: {{ container.resources.requests.memory }}
+{% endif %}
+{% endif %}
+{% endif %}
+{% if container.securityContext is defined %}
+      securityContext:
+{% for key, value in container.securityContext.items() %}
+{% if value is mapping -%}
+        {{ key }}:
+{% for key, value in value.items() %}
+          {{ key }}: {{ value }}
+{% endfor %}
+{% else %}
+        {{ key }}: {{ value }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if container.stdin is defined %}
+      stdin: {{ container.stdin }}
+{% endif %}
+{% if container.tty is defined %}
+      tty: {{ container.tty }}
+{% endif %}
+{% if container.volumeMounts is defined %}
+      volumeMounts:
+{% for volume in container.volumeMounts %}
+        - name: {{ volume.name }}
+          mountPath: {{ volume.mountPath }}
+{% endfor %}
+{% endif %}
+      workingDir: {{ container.workingDir | default('/') }}
+{% endfor %}
+{% endif %}
+{% if container_pod_restartPolicy is defined %}
+  restartPolicy: {{ container_pod_restartPolicy | default(omit) }}
+{% endif %}
+{% if container_pod_volumes is defined %}
+  volumes:
+{% for volume in container_pod_volumes %}
+  - name: {{ volume.name }}
+{% for key, value in volume.items() %}
+{% if key != 'name' %}
+{% if value is mapping %}
+    {{ key }}:
+{% for key, value in value.items() %}
+      {{ key }}: {{ value }}
+{% endfor %}
+{% else %}
+    {{ key }}: {{ value }}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endif %}

@@ -1,0 +1,40 @@
+---
+
+- name: "{{ container_mode }} | services | manage variable XDG_RUNTIME_DIR in ~/.bashrc.d/xdg_runtime_dir.rc"
+  when:
+    - container_state == 'present'
+    - user_owner_service_info is defined
+  become: true
+  ansible.builtin.copy:
+    dest: "{{ user_owner_service_info.home }}/.bashrc.d/xdg_runtime_dir.rc"
+    content: "export XDG_RUNTIME_DIR=/run/user/$UID"
+    owner: "{{ container_user_owner_service }}"
+    group: "{{ container_user_group_service }}"
+
+- name: "{{ container_mode }} | services | pod"
+  set_fact:
+    __container_service_name: "{{ container_pod_name }}"
+
+- name: "{{ container_mode }} | services | pod | ensure service is started and enabled"
+  become: true
+  become_user: "{{ container_user_owner_service }}"
+  become_method: machinectl
+  become_exe: "sudo machinectl"
+  ansible.builtin.systemd:
+    name: "{{ __container_service_name }}"
+    state: "{{ 'started' if container_state == 'present' else 'stopped' }}"
+    enabled: "{{ 'true' if container_state == 'present' else 'false' }}"
+    daemon_reload: "{{ 'true' if container_state == 'present' else 'false' }}"
+    scope: user
+  register: __container_service_name_status
+  until: ( __container_service_name_status.status is defined and __container_service_name_status.status.ActiveState == "active" ) or container_state == 'absent'
+  retries: 15
+  delay: 10
+
+- name: "{{ container_mode }} | services | podman system reset --force"
+  when: container_state == 'absent'
+  become: true
+  become_user: "{{ container_user_owner_service }}"
+  become_method: machinectl
+  become_exe: "sudo machinectl"
+  ansible.builtin.command: "podman system reset --force"

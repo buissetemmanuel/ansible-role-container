@@ -1,0 +1,14 @@
+[Unit]
+Description={{ container_pod_name }} Podman Container
+
+[Service]
+Type=forking
+ExecStartPre=-/usr/bin/podman pod rm -f {{ container_pod_name }}
+ExecStart=/usr/bin/podman play kube {{ container_pod_home_dir }}/{{ container_pod_name }}.yml
+ExecReload=-/usr/bin/podman pod stop {{ container_pod_name }}
+ExecReload=-/usr/bin/podman pod rm -f {{ container_pod_name }}
+ExecStop=-/usr/bin/podman pod rm -f {{ container_pod_name }}
+Environment=PODMAN_SYSTEMD_UNIT=%n
+
+[Install]
+WantedBy=default.target

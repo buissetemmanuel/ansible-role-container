@@ -1,0 +1,70 @@
+---
+
+# Manage users and groups
+users_managed: false
+users_groups: []
+#  - name: container
+#    state: present
+#    gid: 9999
+#    system: false
+users_users: []
+#  - name: container
+#    state: present
+#    comment: Container GEOCS Comment
+#    create_home: true
+#    uid: 8888
+#    group: container
+#    groups: "container,wheel,docker"
+#    home: "/home"
+#    shell: "/bin/bash"
+#    system: false
+
+# Manage packages
+packages_managed: false
+
+# Manage systems
+systems_managed: false
+
+# user owner/group of filesystem
+container_user_owner: container_user_owner
+container_user_group: container_user_group
+
+# group of logs filesystem
+container_user_group_logs: container_user_group_logs
+
+# user owner/group service (start/stop/disable/enable/restart)
+container_user_owner_service: container_user_owner_service
+container_user_group_service: container_user_group_service
+
+# install podman
+container_install_podman: false
+
+# state of container - present=install - absent=uninstall
+container_state: present
+
+# home directory of container filesystem
+container_home_dir: "/opt"
+
+# some directories needed for container (in addition to container_directories_mandatories)
+container_directories: []
+
+# some templates needed for container (in addition to container_templates_mandatories)
+container_templates: []
+
+# some files needed for container
+container_files: []
+
+# Kubernetes API version (default to 'v1')
+container_pod_apiversion: ~
+
+# name of pod
+container_pod_name: container_pod
+
+# labels of pod
+container_pod_labels: {}
+
+# containers in pod, see templates/podman.yml.j2
+container_pod_containers: []
+
+# volume on the host that can be used in containers ('container_pod_containers')
+container_pod_volumes:

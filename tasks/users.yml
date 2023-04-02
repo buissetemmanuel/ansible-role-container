@@ -1,0 +1,71 @@
+---
+
+- name: "{{ container_mode }} (container_mode fact)"
+  vars:
+    container_mode: "Asserts"
+  ansible.builtin.include_tasks: asserts_users.yml
+
+- name: "{{ container_mode }} | users | users_groups"
+  become: true
+  when: users_groups is defined
+  ansible.builtin.group:
+    name: "{{ group.name }}"
+    state: "{{ group.state | default('present') }}"
+    gid: "{{ group.gid | default(omit) }}"
+    system: "{{ group.system | default(omit) }}"
+  loop: "{{ users_groups }}"
+  loop_control:
+    loop_var: group
+    label: "{{ group.name }}"
+
+- name: "{{ container_mode }} | users | users_users"
+  become: true
+  when: users_users is defined
+  ansible.builtin.user:
+    name: "{{ user.name }}"
+    state: "{{ user.state | default('present') if container_state == 'present' else 'absent' }}"
+    comment: "{{ user.comment | default(omit) }}"
+    create_home: "{{ user.create_home | default(omit) }}"
+    uid: "{{ user.uid | default(omit) }}"
+    group: "{{ user.group | default(user.name) }}"
+    groups: "{{ user.groups | default(omit) }}"
+    home: "{{ user.home | default(omit) }}"
+    shell: "{{ user.shell | default('/bin/bash') }}"
+    system: "{{ user.system | default(omit) }}"
+    remove: "{{ user.remove | default(omit) }}"
+    force: "{{ false if container_state == 'present' else true }}"
+  loop: "{{ users_users }}"
+  loop_control:
+    loop_var: user
+    label: "{{ user.name }}"
+
+- name: "{{ container_mode }} | users | users_groups (delete)"
+  when:
+    - users_groups is defined
+    - container_state == 'absent'
+  become: true
+  ansible.builtin.group:
+    name: "{{ group.name }}"
+    state: absent
+  loop: "{{ users_groups }}"
+  loop_control:
+    loop_var: group
+    label: "{{ group.name }}"
+
+- name: "{{ container_mode }} | users | get user_owner_service_info"
+  when: container_state == 'present'
+  ansible.builtin.user:
+    name: "{{ container_user_owner_service }}"
+  check_mode: true
+  changed_when: false
+  register: user_owner_service_info
+
+- name: "{{ container_mode }} | users | create folder ~/.bashrc.d/ to add some nice config"
+  when: container_state == 'present'
+  become: true
+  ansible.builtin.file:
+    path: "{{ user_owner_service_info.home }}/.bashrc.d"
+    state: directory
+    owner: "{{ container_user_owner_service }}"
+    group: "{{ container_user_group_service }}"
+    mode: 0755
