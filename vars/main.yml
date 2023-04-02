@@ -2,29 +2,34 @@
 
 container_pod_home_dir: "{{ container_home_dir }}/{{ container_pod_name }}"
 container_pod_etc_dir: "{{ container_pod_home_dir }}/etc"
-container_pod_log_dir: "{{ container_pod_home_dir }}/log"
+container_pod_logs_dir: "{{ container_pod_home_dir }}/logs"
 container_pod_secret_dir: "{{ container_pod_home_dir }}/secret"
 container_pod_tmp_dir: "{{ container_pod_home_dir }}/tmp"
 container_pod_service_dir: "$HOME/.config/systemd/user"
 
 container_directories_state: "{{ 'directory' if container_state == 'present' else 'absent' }}"
-container_directories_mode: 0750
+container_directories_mode: '0750'
 container_directories_mandatories:
   - path: "{{ container_pod_home_dir }}"
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
+    mode: '0755'
   - path: "{{ container_pod_etc_dir }}"
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
-  - path: "{{ container_pod_log_dir }}"
+    mode: "{{ container_directories_mode }}"
+  - path: "{{ container_pod_logs_dir }}"
     owner: "{{ container_user_owner_service }}"
-    group: "{{ container_user_group }}"
+    group: "{{ container_user_group_logs }}"
+    mode: "{{ container_directories_mode }}"
   - path: "{{ container_pod_secret_dir }}"
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
+    mode: "{{ container_directories_mode }}"
   - path: "{{ container_pod_tmp_dir }}"
     owner: "{{ container_user_owner_service }}"
     group: "{{ container_user_group }}"
+    mode: "{{ container_directories_mode }}"
 
 container_files_state: "{{ 'file' if container_state == 'present' else 'absent' }}"
 container_files_mode: 0640

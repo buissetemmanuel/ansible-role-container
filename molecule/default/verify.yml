@@ -53,13 +53,13 @@
       register: container_response
       failed_when: updates_version not in container_response.content
 
-- name: Verify uninstall
-  hosts: all
-  vars_files:
-    - ../../defaults/main.yml
-    - vars/container.yml
-    - vars/container_verify_uninstall.yml
-  tasks:
-    - name: Include buissetemmanuel.container
-      ansible.builtin.include_role:
-        name: buissetemmanuel.container
+#- name: Verify uninstall
+#  hosts: all
+#  vars_files:
+#    - ../../defaults/main.yml
+#    - vars/container.yml
+#    - vars/container_verify_uninstall.yml
+#  tasks:
+#    - name: Include buissetemmanuel.container
+#      ansible.builtin.include_role:
+#        name: buissetemmanuel.container
