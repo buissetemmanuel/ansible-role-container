@@ -2,7 +2,7 @@ galaxy_info:
   role_name: container
   author: BUISSET Emmanuel
   namespace: buissetemmanuel
-  description: Manage container (Docker, Podman)
+  description: Manage Podman Rootless Container
   company: BUISSET
 
   # If the issue tracker for your role is not on github, uncomment the
