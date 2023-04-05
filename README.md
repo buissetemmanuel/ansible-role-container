@@ -52,6 +52,9 @@ TODO
 
 > Based on [podman-kube-play](https://docs.podman.io/en/latest/markdown/podman-kube-play.1.html)
 
+- add pipeline with [Github actions](https://github.com/features/actions)
+- add lint with [ansible-lint](https://ansible-lint.readthedocs.io/)
+
 License
 -------
 
