@@ -61,5 +61,5 @@ License
 Author Information
 ------------------
 
-[email]: https://img.shields.io/badge/BUISSET-Emmanuel-orange.svg
+[email]: https://img.shields.io/badge/@-emmanuel@buisset.ch-orange.svg
 [![email]](mailto:emmanue@buisset.ch)
