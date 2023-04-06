@@ -5,9 +5,6 @@ dependency:
     requirements-file: molecule/default/collections.yml
 driver:
   name: vagrant
-  provider:
-    name: libvirt
-    type: libvirt
 platforms:
   - name: molecule-container-role-instance-1-fedora37
     box: "fedora/37-cloud-base"
