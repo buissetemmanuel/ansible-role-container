@@ -55,7 +55,10 @@ jobs:
           python-version: '3.x'
 
       - name: Install vagrant
-        run: sudo apt-get install -y vagrant libvirt
+        run: sudo apt-get install -y vagrant qemu-kvm libvirt-daemon-system
+
+      - name: Add the user that will be used to manage virtual machines needs to be added to the libvirt group
+        run: sudo adduser $USER libvirt
 
       - name: Install test dependencies.
         run: pip3 install molecule molecule-vagrant
