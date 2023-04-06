@@ -32,4 +32,3 @@ container_pod_volumes:
   - name: nginx-default-conf
     hostPath:
       path: "{{ container_pod_etc_dir }}/nginx.default.conf"
-

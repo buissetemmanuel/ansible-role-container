@@ -67,4 +67,3 @@ container_pod_volumes:
   - name: nginx-logs
     hostPath:
       path: "{{ container_pod_logs_dir }}"
-

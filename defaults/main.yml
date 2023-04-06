@@ -45,10 +45,12 @@ container_state: present
 # home directory of container filesystem
 container_home_dir: "/opt"
 
-# some directories needed for container (in addition to container_directories_mandatories)
+# some directories needed for container
+# (in addition to container_directories_mandatories)
 container_directories: []
 
-# some templates needed for container (in addition to container_templates_mandatories)
+# some templates needed for container
+# (in addition to container_templates_mandatories)
 container_templates: []
 
 # some files needed for container
