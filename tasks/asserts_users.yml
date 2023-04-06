@@ -6,14 +6,14 @@
     - name: "{{ container_mode }} | users | users_groups is iterable"
       ansible.builtin.assert:
         that: users_groups is iterable
-        quiet: yes
-    
+        quiet: true
+
     - name: "{{ container_mode }} | users | group.name "
       ansible.builtin.assert:
         that:
           - item.name is defined
           - item.name is string
-        quiet: yes
+        quiet: true
       loop: "{{ users_groups }}"
       loop_control:
         label: "{{ item.name }}"
@@ -24,7 +24,7 @@
         that:
           - item.state is string
           - item.state in [ "absent", "present" ]
-        quiet: yes
+        quiet: true
       loop: "{{ users_groups }}"
       loop_control:
         label: "{{ item.name }}"
@@ -35,7 +35,7 @@
         that:
           - item.gid is number
           - item.gid > 0
-        quiet: yes
+        quiet: true
       loop: "{{ users_groups }}"
       loop_control:
         label: "{{ item.name }}"
@@ -45,7 +45,7 @@
       ansible.builtin.assert:
         that:
           - item.system is boolean
-        quiet: yes
+        quiet: true
       loop: "{{ users_groups }}"
       loop_control:
         label: "{{ item.name }}"
@@ -56,14 +56,14 @@
     - name: "{{ container_mode }} | users | users_users is iterable"
       ansible.builtin.assert:
         that: users_users is iterable
-        quiet: yes
+        quiet: true
 
     - name: "{{ container_mode }} | users | user.name "
       ansible.builtin.assert:
         that:
           - item.name is defined
           - item.name is string
-        quiet: yes
+        quiet: true
       loop: "{{ users_users }}"
       loop_control:
         label: "{{ item.name }}"
@@ -74,7 +74,7 @@
         that:
           - item.state is string
           - item.state in [ "absent", "present" ]
-        quiet: yes
+        quiet: true
       loop: "{{ users_users }}"
       loop_control:
         label: "{{ item.name }}"
@@ -85,7 +85,7 @@
         that:
           - item.uid is number
           - item.uid >= 0
-        quiet: yes
+        quiet: true
       loop: "{{ users_users }}"
       loop_control:
         label: "{{ item.name }}"
@@ -95,7 +95,7 @@
       ansible.builtin.assert:
         that:
           - item.system is boolean
-        quiet: yes
+        quiet: true
       loop: "{{ users_users }}"
       loop_control:
         label: "{{ item.name }}"
@@ -105,7 +105,7 @@
       ansible.builtin.assert:
         that:
           - item.comment is string
-        quiet: yes
+        quiet: true
       loop: "{{ users_users }}"
       loop_control:
         label: "{{ item.name }}"
@@ -115,7 +115,7 @@
       ansible.builtin.assert:
         that:
           - item.create_home is boolean
-        quiet: yes
+        quiet: true
       loop: "{{ users_users }}"
       loop_control:
         label: "{{ item.name }}"
@@ -125,7 +125,7 @@
       ansible.builtin.assert:
         that:
           - item.group is string
-        quiet: yes
+        quiet: true
       loop: "{{ users_users }}"
       loop_control:
         label: "{{ item.name }}"
@@ -135,7 +135,7 @@
       ansible.builtin.assert:
         that:
           - item.groups is string
-        quiet: yes
+        quiet: true
       loop: "{{ users_users }}"
       loop_control:
         label: "{{ item.name }}"
@@ -145,7 +145,7 @@
       ansible.builtin.assert:
         that:
           - item.home is string
-        quiet: yes
+        quiet: true
       loop: "{{ users_users }}"
       loop_control:
         label: "{{ item.name }}"
@@ -155,7 +155,7 @@
       ansible.builtin.assert:
         that:
           - item.shell is string
-        quiet: yes
+        quiet: true
       loop: "{{ users_users }}"
       loop_control:
         label: "{{ item.name }}"

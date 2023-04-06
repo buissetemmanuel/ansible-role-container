@@ -1,14 +1,5 @@
 ---
 
-#- name: "{{ container_mode }} | systems | manage variable XDG_RUNTIME_DIR in ~/.bashrc.d/xdg_runtime_dir.rc"
-#  when: container_state == 'present'
-#  become: true
-#  ansible.builtin.copy:
-#    dest: "{{ user_owner_service_info.home }}/.bashrc.d/xdg_runtime_dir.rc"
-#    content: "export XDG_RUNTIME_DIR=/run/user/$UID"
-#    owner: "{{ container_user_owner_service }}"
-#    group: "{{ container_user_group_service }}"
-
 # Persistent DBUS session
 - name: "{{ container_mode }} | systems | check if user is lingering"
   become: true
