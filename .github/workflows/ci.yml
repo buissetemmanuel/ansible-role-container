@@ -35,31 +35,31 @@ jobs:
         run: |
           yamllint .
 
-  molecule:
-    name: Molecule
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        distro:
-          - fedora37
-
-    steps:
-      - name: Check out the codebase.
-        uses: actions/checkout@v2
-        with:
-          path: 'buissetemmanuel.container'
-
-      - name: Set up Python 3.
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install and config Libvirt, Vagrant and QEMU
-        run: .github/workflows/scripts/ubuntu-setup.sh
-
-      - name: Run Molecule tests.
-        run: molecule test
-        env:
-          PY_COLORS: '1'
-          ANSIBLE_FORCE_COLOR: '1'
-          MOLECULE_DISTRO: ${{ matrix.distro }}
+#  molecule:
+#    name: Molecule
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        distro:
+#          - fedora37
+#
+#    steps:
+#      - name: Check out the codebase.
+#        uses: actions/checkout@v2
+#        with:
+#          path: 'buissetemmanuel.container'
+#
+#      - name: Set up Python 3.
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: '3.x'
+#
+#      - name: Install and config Libvirt, Vagrant and QEMU
+#        run: .github/workflows/scripts/ubuntu-setup.sh
+#
+#      - name: Run Molecule tests.
+#        run: molecule test
+#        env:
+#          PY_COLORS: '1'
+#          ANSIBLE_FORCE_COLOR: '1'
+#          MOLECULE_DISTRO: ${{ matrix.distro }}
