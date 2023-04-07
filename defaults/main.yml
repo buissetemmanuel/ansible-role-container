@@ -36,9 +36,6 @@ container_user_group_logs: container_user_group_logs
 container_user_owner_service: container_user_owner_service
 container_user_group_service: container_user_group_service
 
-# install podman
-container_install_podman: false
-
 # state of container - present=install - absent=uninstall
 container_state: present
 

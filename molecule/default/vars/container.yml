@@ -26,7 +26,6 @@ packages_managed: true
 systems_managed: true
 
 # Manage container
-container_install_podman: true
 container_directories:
   - path: "{{ container_pod_home_dir }}/converge"
     owner: "{{ container_user_owner }}"
