@@ -27,7 +27,7 @@ systems_managed: true
 
 # Manage container
 container_directories:
-  - path: "{{ container_pod_home_dir }}/converge"
+  - path: "{{ container_pod_home_dir }}/molecule-directory-test-to-delete"
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
     mode: "{{ container_directories_mode }}"
@@ -35,6 +35,13 @@ container_directories:
 container_templates:
   - src: "nginx.default.conf.j2"
     dest: "{{ container_pod_etc_dir }}/nginx.default.conf"
+    owner: "{{ container_user_owner }}"
+    group: "{{ container_user_group_service }}"
+    mode: "{{ container_files_mode }}"
+
+container_files:
+  - src: "molecule-file-test-to-delete"
+    dest: "{{ container_pod_home_dir }}/molecule-directory-test-to-delete/molecule-file-test-to-delete"
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
     mode: "{{ container_files_mode }}"

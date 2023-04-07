@@ -7,6 +7,7 @@ container_templates:
     dest: "{{ container_pod_etc_dir }}/nginx.default.conf"
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
+    mode: "{{ container_files_mode }}"
 
 container_pod_containers:
   - name: container_name_a

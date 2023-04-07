@@ -1,12 +1,12 @@
 ---
 
-- name: "{{ container_mode }} | files |  mandatories templates and from outside the role"
+- name: "{{ container_mode }} | files | mandatories templates and from outside the role"
   when: container_state == 'present'
   become: true
   ansible.builtin.template:
     src: "{{ template.src }}"
     dest: "{{ template.dest }}"
-    mode: "{{ container_files_mode }}"
+    mode: "{{ template.mode if template.mode is defined else container_files_mode }}"
     owner: "{{ template.owner }}"
     group: "{{ template.group }}"
     seuser: system_u
@@ -28,9 +28,12 @@
   ansible.builtin.template:
     src: "{{ template.src }}"
     dest: "{{ template.dest }}"
-    mode: "{{ container_files_mode }}"
+    mode: "{{ template.mode if template.mode is defined else container_files_mode }}"
     owner: "{{ template.owner }}"
     group: "{{ template.group }}"
+    seuser: system_u
+    serole: object_r
+    setype: container_file_t
   loop: "{{ container_services_templates_mandatories }}"
   loop_control:
     loop_var: template
@@ -44,7 +47,7 @@
   ansible.builtin.copy:
     src: "{{ file.src }}"
     dest: "{{ file.dest }}"
-    mode: "{{ container_files_mode }}"
+    mode: "{{ file.mode if file.mode is defined else container_files_mode }}"
     owner: "{{ file.owner }}"
     group: "{{ file.group }}"
     seuser: system_u
