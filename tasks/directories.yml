@@ -11,7 +11,7 @@
     seuser: system_u
     serole: object_r
     setype: container_file_t
-  loop: "{{ container_directories_mandatories }}"
+  loop: "{{ container_directories_mandatories + container_directories }}"
   loop_control:
     loop_var: directory
     label: "{{ directory.path }}"

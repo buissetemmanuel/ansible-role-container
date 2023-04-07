@@ -30,12 +30,14 @@ container_directories:
   - path: "{{ container_pod_home_dir }}/converge"
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
+    mode: "{{ container_directories_mode }}"
 
 container_templates:
   - src: "nginx.default.conf.j2"
     dest: "{{ container_pod_etc_dir }}/nginx.default.conf"
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
+    mode: "{{ container_files_mode }}"
 
 updates_version: "latest"
 
