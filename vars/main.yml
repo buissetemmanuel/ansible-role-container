@@ -35,18 +35,16 @@ container_files_state: "{{ 'file' if container_state == 'present' else 'absent' 
 container_files_mode: 0640
 
 container_templates_mandatories:
-  - src: "podman.yml.j2"
+  - src: podman.yml.j2
     dest: "{{ container_pod_home_dir }}/{{ container_pod_name }}.yml"
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
-    mode: "0640"
 
 container_services_templates_mandatories:
-  - src: "podman.service.j2"
+  - src: podman.service.j2
     dest: "{{ container_pod_service_dir }}/{{ container_pod_name }}.service"
     owner: "{{ container_user_owner_service }}"
     group: "{{ container_user_group_service }}"
-    mode: "0640"
 
 container_packages_mandatories:
   - systemd-container
