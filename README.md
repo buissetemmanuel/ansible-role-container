@@ -1,3 +1,5 @@
+[![CI](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/ci.yml/badge.svg)](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/ci.yml)
+
 Ansible Role Container
 =========
 
