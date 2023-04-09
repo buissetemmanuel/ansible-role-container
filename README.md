@@ -1,4 +1,7 @@
-[![CI](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/ci.yml/badge.svg)](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/ci.yml)
+[![MOLECULE LINT](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/molecule-lint.yml/badge.svg)](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/molecule-lint.yml)
+[![MOLECULE TEST](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/molecule-test.yml/badge.svg)](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/molecule-test.yml)
+[![RELEASE](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/release.yml/badge.svg)](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/release.yml)
+
 
 Ansible Role Container
 =========
