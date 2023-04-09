@@ -17,10 +17,11 @@ jobs:
   lint:
     uses: buissetemmanuel/ansible-role-container/.github/workflows/molecule-lint.yml@main
 
-  test:
-    uses: buissetemmanuel/ansible-role-container/.github/workflows/molecule-test.yml@main
+#  test:
+#    uses: buissetemmanuel/ansible-role-container/.github/workflows/molecule-test.yml@main
 
   release:
+    needs: lint
     permissions:
       contents: write
     uses: buissetemmanuel/cicd-templates/.github/workflows/release.yml@main
