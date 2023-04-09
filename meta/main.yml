@@ -11,6 +11,6 @@ galaxy_info:
   platforms:
     - name: Fedora
       versions:
-        - 37
+        - "37"
   galaxy_tags: []
 dependencies: []
