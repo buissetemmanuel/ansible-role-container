@@ -1,0 +1,26 @@
+---
+
+name: RELEASE
+
+'on':
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read # for checkout
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  lint:
+    uses: buissetemmanuel/ansible-role-container/.github/workflows/molecule-lint.yml@main
+
+  test:
+    uses: buissetemmanuel/ansible-role-container/.github/workflows/molecule-test.yml@main
+
+  release:
+    permissions:
+      contents: write
+    uses: buissetemmanuel/cicd-templates/.github/workflows/release.yml@main

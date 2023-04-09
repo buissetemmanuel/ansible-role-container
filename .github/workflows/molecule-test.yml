@@ -4,10 +4,11 @@ name: MOLECULE TEST
   push:
   pull_request:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   lint:
-    uses: .github/workflows/molecule-lint.yml@main
+    uses: buissetemmanuel/ansible-role-container/.github/workflows/molecule-lint.yml@main
 
   test:
     needs: lint
