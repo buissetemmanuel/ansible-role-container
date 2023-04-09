@@ -3,19 +3,23 @@
 # Persistent DBUS session
 - name: "{{ container_mode }} | systems | check if user is lingering"
   become: true
-  stat:
+  ansible.builtin.stat:
     path: "/var/lib/systemd/linger/{{ container_user_owner_service }}"
   register: user_owner_service_lingering
 
 - name: "{{ container_mode }} | systems | enable lingering is needed"
   when: not user_owner_service_lingering.stat.exists and container_state == 'present'
   become: true
-  command: "loginctl enable-linger {{ container_user_owner_service }}"
+  ansible.builtin.command: "loginctl enable-linger {{ container_user_owner_service }}"
+  register: __command_loginctl_enable_linger
+  changed_when: __command_loginctl_enable_linger.rc != 0
 
 - name: "{{ container_mode }} | systems | disable lingering is needed"
   when: container_state == 'absent'
   become: true
-  command: "loginctl disable-linger {{ container_user_owner_service }}"
+  ansible.builtin.command: "loginctl disable-linger {{ container_user_owner_service }}"
+  register: __command_loginctl_disable_linger
+  changed_when: __command_loginctl_disable_linger.rc != 0
 
 - name: "{{ container_mode }} | systems | create /etc/systemd/system/user@.service.d folder"
   become: true

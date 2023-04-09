@@ -13,7 +13,7 @@
     mode: "{{ container_files_mode }}"
 
 - name: "{{ container_mode }} | services | pod"
-  set_fact:
+  ansible.builtin.set_fact:
     __container_service_name: "{{ container_pod_name }}"
 
 - name: "{{ container_mode }} | services | pod | ensure service is started and enabled"
@@ -39,3 +39,5 @@
   become_method: machinectl
   become_exe: "sudo machinectl"
   ansible.builtin.command: "podman system reset --force"
+  register: __podman_system_reset
+  changed_when: __podman_system_reset.rc != 0
