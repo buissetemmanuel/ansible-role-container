@@ -22,6 +22,9 @@
   ansible.builtin.file:
     path: "/etc/systemd/system/user@.service.d"
     state: "{{ container_directories_state }}"
+    owner: root
+    group: root
+    mode: "{{ container_files_mode }}"
 
 - name: "{{ container_mode }} | systems | copy delegate.conf file"
   when: container_state == 'present'
@@ -31,7 +34,7 @@
     dest: "/etc/systemd/system/user@.service.d/delegate.conf"
     owner: root
     group: root
-    mode: 0640
+    mode: "{{ container_files_mode }}"
 
 - name: "{{ container_mode }} | systems | daemon-reload"
   when: container_state == 'present'

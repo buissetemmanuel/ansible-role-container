@@ -10,6 +10,7 @@
     content: "export XDG_RUNTIME_DIR=/run/user/$UID"
     owner: "{{ container_user_owner_service }}"
     group: "{{ container_user_group_service }}"
+    mode: "{{ container_files_mode }}"
 
 - name: "{{ container_mode }} | services | pod"
   set_fact:
