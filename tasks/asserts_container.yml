@@ -1,10 +1,7 @@
 ---
 
-- name: "{{ container_mode }} | check images exists on remote registry"
-  podman_manifest:
-    name: "{{ container.image_name }}"
-    tag: "{{ container.image_tag }}"
+- name: "{{ container_mode }} | check images"
+  ansible.builtin.include_tasks: asserts_image.yml
   loop: "{{ container_pod_containers }}"
   loop_control:
     loop_var: container
-    label: "{{ container.image_name }}:{{ container.image_tag }}"

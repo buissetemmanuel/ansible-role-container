@@ -1,0 +1,17 @@
+---
+
+- name: "{{ container_mode }} | check images exists on local registry"
+  become: true
+  become_user: "{{ container_user_owner_service }}"
+  become_method: machinectl
+  become_exe: "sudo machinectl"
+  podman_image_exists:
+    name: "{{ container.image_name }}"
+    tag: "{{ container.image_tag }}"
+  register: __container_local_registry
+
+- name: "{{ container_mode }} | check images exists on remote registry"
+  when: not __container_local_registry.image_exists
+  podman_manifest:
+    name: "{{ container.image_name }}"
+    tag: "{{ container.image_tag }}"
