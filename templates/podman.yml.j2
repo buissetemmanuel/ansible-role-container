@@ -37,6 +37,9 @@ spec:
 {% if container.image_name is defined %}
       image: {{ container.image_name }}:{{ container.image_tag | default('latest') }}
 {% endif %}
+{% if container.image_pull_policy is defined %}
+      imagePullPolicy: {{ container.image_pull_policy | default('always') }}
+{% endif %}
 {% if container.ports is defined %}
       ports:
 {% for port in container.ports %}
