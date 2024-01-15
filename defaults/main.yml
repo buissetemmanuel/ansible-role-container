@@ -66,4 +66,4 @@ container_pod_labels: {}
 container_pod_containers: []
 
 # volume on the host that can be used in containers ('container_pod_containers')
-container_pod_volumes:
+container_pod_volumes: []
