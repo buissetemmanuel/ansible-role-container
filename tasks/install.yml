@@ -8,14 +8,14 @@
   when: packages_managed
   ansible.builtin.include_tasks: packages.yml
 
+- name: "{{ container_mode }} | users"
+  when: users_managed
+  ansible.builtin.include_tasks: users.yml
+
 - name: "{{ container_mode }} (container_mode fact)"
   vars:
     container_mode: "Asserts"
   ansible.builtin.include_tasks: asserts_container.yml
-
-- name: "{{ container_mode }} | users"
-  when: users_managed
-  ansible.builtin.include_tasks: users.yml
 
 - name: "{{ container_mode }} | systems"
   when: systems_managed

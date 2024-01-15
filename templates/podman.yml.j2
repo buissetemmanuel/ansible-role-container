@@ -17,13 +17,13 @@ spec:
     - name: {{ container.name }}
 {% if container.args is defined %}
       args:
-{% for arg in container.args.items() %}
+{% for arg in container.args %}
         - {{ arg }}
 {% endfor %}
 {% endif %}
 {% if container.command is defined %}
       command:
-{% for cmd in container.command.items() %}
+{% for cmd in container.command %}
         - {{ cmd }}
 {% endfor %}
 {% endif %}
