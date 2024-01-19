@@ -4,7 +4,7 @@
   when: user_owner_service_info is defined
   become: true
   become_user: "{{ container_user_owner_service }}"
-  become_method: machinectl
+  become_method: community.general.machinectl
   become_exe: "sudo machinectl"
   podman_image_exists:
     name: "{{ container.image_name }}"

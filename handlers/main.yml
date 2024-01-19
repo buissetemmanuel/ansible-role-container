@@ -3,7 +3,7 @@
 - name: "Restart service"
   become: true
   become_user: "{{ container_user_owner_service }}"
-  become_method: machinectl
+  become_method: community.general.machinectl
   become_exe: "sudo machinectl"
   ansible.builtin.systemd:
     name: "{{ __container_service_name }}"

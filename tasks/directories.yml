@@ -19,7 +19,7 @@
 - name: "{{ container_mode }} | directories | for services pod"
   become: true
   become_user: "{{ container_user_owner_service }}"
-  become_method: machinectl
+  become_method: community.general.machinectl
   become_exe: "sudo machinectl"
   ansible.builtin.file:
     state: "{{ container_directories_state }}"
