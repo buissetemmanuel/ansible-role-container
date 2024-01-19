@@ -8,7 +8,7 @@ name: RELEASE
       - main
 
 permissions:
-  contents: read # for checkout
+  contents: read
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -16,9 +16,6 @@ env:
 jobs:
   lint:
     uses: buissetemmanuel/ansible-role-container/.github/workflows/molecule-lint.yml@main
-
-#  test:
-#    uses: buissetemmanuel/ansible-role-container/.github/workflows/molecule-test.yml@main
 
   release:
     needs: lint
