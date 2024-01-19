@@ -44,7 +44,7 @@
         name: buissetemmanuel.container
 
     - name: Flush handlers
-      meta: flush_handlers
+      ansible.builtin.meta: flush_handlers
 
     - name: "Verify | check container response"
       ansible.builtin.uri:
