@@ -9,6 +9,6 @@ on:
 
 jobs:
   yaml-lint:
-    uses: buissetemmanuel/cicd-templates/.github/workflows/yamllint.yml@v1.1.1
+    uses: buissetemmanuel/cicd-templates/.github/workflows/yamllint.yml@v1.1.2
   ansible-lint:
-    uses: buissetemmanuel/cicd-templates/.github/workflows/ansible-lint.yml@v1.1.1
+    uses: buissetemmanuel/cicd-templates/.github/workflows/ansible-lint.yml@v1.1.2
