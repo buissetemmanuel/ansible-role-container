@@ -61,7 +61,9 @@
   register: user_owner_service_info
 
 - name: "{{ container_mode }} | users | create folder ~/.bashrc.d/ to add some nice config"
-  when: container_state == 'present'
+  when:
+    - not ansible_check_mode
+    - container_state == 'present'
   become: true
   ansible.builtin.file:
     path: "{{ user_owner_service_info.home }}/.bashrc.d"

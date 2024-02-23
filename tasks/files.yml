@@ -20,7 +20,9 @@
     - Restart service
 
 - name: "{{ container_mode }} | files | services templates"
-  when: container_state == 'present'
+  when:
+    - not ansible_check_mode
+    - container_state == 'present'
   become: true
   become_user: "{{ container_user_owner_service }}"
   become_method: community.general.machinectl
