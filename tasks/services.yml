@@ -2,6 +2,7 @@
 
 - name: "{{ container_mode }} | services | manage variable XDG_RUNTIME_DIR in ~/.bashrc.d/xdg_runtime_dir.rc"
   when:
+    - not ansible_check_mode
     - container_state == 'present'
     - user_owner_service_info is defined
   become: true
@@ -17,6 +18,7 @@
     __container_service_name: "{{ container_pod_name }}"
 
 - name: "{{ container_mode }} | services | pod | ensure service is started and enabled"
+  when: not ansible_check_mode
   become: true
   become_user: "{{ container_user_owner_service }}"
   become_method: community.general.machinectl
