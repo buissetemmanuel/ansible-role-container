@@ -82,7 +82,7 @@ spec:
 {% if container.securityContext is defined %}
       securityContext:
 {% for key, value in container.securityContext.items() %}
-{% if value is mapping -%}
+{% if value is mapping %}
         {{ key }}:
 {% for key, value in value.items() %}
           {{ key }}: {{ value }}
