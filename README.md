@@ -2,7 +2,6 @@
 [![MOLECULE TEST](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/molecule-test.yml/badge.svg)](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/molecule-test.yml)
 [![RELEASE](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/release.yml/badge.svg)](https://github.com/buissetemmanuel/ansible-role-container/actions/workflows/release.yml)
 
-
 Ansible Role Container
 =========
 
