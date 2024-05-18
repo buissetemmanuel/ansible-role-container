@@ -19,6 +19,7 @@ jobs:
     uses: buissetemmanuel/ansible-role-container/.github/workflows/molecule-lint.yml@main
 
   release:
+    needs: lint
     permissions:
       contents: write
     name: Release
