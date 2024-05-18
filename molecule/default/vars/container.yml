@@ -1,13 +1,11 @@
 ---
 
-# Manage users and groups
-users_managed: true
-users_groups:
+user_groups:
   - name: container_user_group
   - name: container_user_group_service
   - name: container_user_group_logs
   - name: container_user_group_access_logs
-users_users:
+user_users:
   - name: container_user_owner
     group: container_user_group
     create_home: true
@@ -19,11 +17,11 @@ users_users:
     group: container_user_group_access_logs
     groups: container_user_group_logs
 
-# Manage packages
-packages_managed: true
-
-# Manage systems
-systems_managed: true
+package_packages:
+  - {package: systemd-container}
+  - {package: acl}
+  - {package: iptables-nft}
+  - {package: podman}
 
 # Manage container
 container_directories:

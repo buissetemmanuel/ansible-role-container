@@ -1,0 +1,25 @@
+---
+
+user_groups:
+  - name: container_user_group
+  - name: container_user_group_service
+  - name: container_user_group_logs
+  - name: container_user_group_access_logs
+user_users:
+  - name: container_user_owner
+    group: container_user_group
+    create_home: true
+  - name: container_user_owner_service
+    group: container_user_group_service
+    create_home: true
+    groups: container_user_group_logs
+    systemd: true
+  - name: container_user_access_logs
+    group: container_user_group_access_logs
+    groups: container_user_group_logs
+
+package_packages:
+  - {package: systemd-container}
+  - {package: acl}
+  - {package: iptables-nft}
+  - {package: podman}

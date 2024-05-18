@@ -1,30 +1,5 @@
 ---
 
-# Manage users and groups
-users_managed: false
-users_groups: []
-#  - name: container
-#    state: present
-#    gid: 9999
-#    system: false
-users_users: []
-#  - name: container
-#    state: present
-#    comment: Container GEOCS Comment
-#    create_home: true
-#    uid: 8888
-#    group: container
-#    groups: "container,wheel,docker"
-#    home: "/home"
-#    shell: "/bin/bash"
-#    system: false
-
-# Manage packages
-packages_managed: false
-
-# Manage systems
-systems_managed: false
-
 # user owner/group of filesystem
 container_user_owner: container_user_owner
 container_user_group: container_user_group

@@ -10,9 +10,9 @@ driver:
     name: libvirt
     type: libvirt
 platforms:
-  - name: molecule-container-role-instance-1-fedora37
-    box: "fedora/37-cloud-base"
-    box_version: "37.20221105.0"
+  - name: molecule-container-role-instance-1-fedora39
+    box: "fedora/39-cloud-base"
+    box_version: "39.20231031.1"
     memory: 4096
     cpus: 2
     timezone: Europe/Zurich

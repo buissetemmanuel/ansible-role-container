@@ -1,0 +1,14 @@
+---
+
+- name: Prepare the Molecule Test Resources
+  hosts: all
+  vars_files:
+    - vars/prepare.yml
+  tasks:
+    - name: Include buissetemmanuel.package
+      ansible.builtin.include_role:
+        name: package
+
+    - name: Include buissetemmanuel.user
+      ansible.builtin.include_role:
+        name: user

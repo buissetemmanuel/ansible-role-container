@@ -1,18 +1,5 @@
 ---
 
-- name: "{{ container_mode }} | services | manage variable XDG_RUNTIME_DIR in ~/.bashrc.d/xdg_runtime_dir.rc"
-  when:
-    - not ansible_check_mode
-    - container_state == 'present'
-    - user_owner_service_info is defined
-  become: true
-  ansible.builtin.copy:
-    dest: "{{ user_owner_service_info.home }}/.bashrc.d/xdg_runtime_dir.rc"
-    content: "export XDG_RUNTIME_DIR=/run/user/$UID"
-    owner: "{{ container_user_owner_service }}"
-    group: "{{ container_user_group_service }}"
-    mode: "{{ container_files_mode }}"
-
 - name: "{{ container_mode }} | services | pod"
   ansible.builtin.set_fact:
     __container_service_name: "{{ container_pod_name }}"
