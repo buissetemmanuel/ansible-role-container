@@ -1,0 +1,13 @@
+---
+
+- name: "{{ container_mode }} | Gather the package facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "{{ container_mode }} | check whether a package called {{ package }} is installed"
+  when:
+    - not ansible_check_mode
+    - 'package | string not in ansible_facts.packages'
+  become: true
+  ansible.builtin.fail:
+    msg: "The package '{{ package}}' must be installed!"
