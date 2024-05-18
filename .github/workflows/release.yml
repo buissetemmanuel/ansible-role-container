@@ -11,14 +11,29 @@ permissions:
   contents: read
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.PAT_CLASSIC }}
+  SEMANTIC_RELEASE_PACKAGES: '@semantic-release/github'
 
 jobs:
   lint:
     uses: buissetemmanuel/ansible-role-container/.github/workflows/molecule-lint.yml@main
 
   release:
-    needs: lint
     permissions:
       contents: write
-    uses: buissetemmanuel/cicd-templates/.github/workflows/release.yml@main
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+
+      - name: Install dependencies
+        run: npm install ${{ env.SEMANTIC_RELEASE_PACKAGES }} -D
+
+      - name: Release
+        run: npx semantic-release
