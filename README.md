@@ -34,12 +34,6 @@ Role Variables
 
 See [defaults/main.yml](defaults/main.yml) for available variables.
 
-If you whant to manage `packages`, `users` or `systems`, use one or more variable listed below:
-
-    packages_managed: false
-    users_managed: false
-    systems_managed: false
-
 > See [molecule/default/vars/container.yml](molecule/default/vars/container.yml) for example variables.
 
 Example Playbook
