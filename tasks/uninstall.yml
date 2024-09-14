@@ -39,5 +39,5 @@
     state: "{{ container_directories_state }}"
     path: "{{ container_pod_service_dir }}"
     mode: "{{ container_directories_mode }}"
-    owner: "{{ container_user_owner_service }}" 
+    owner: "{{ container_user_owner_service }}"
     group: "{{ container_user_group_service }}"
