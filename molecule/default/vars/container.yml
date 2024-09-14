@@ -23,12 +23,16 @@ package_packages:
   - {package: iptables-nft}
   - {package: podman}
 
+container_run_as_user_owner: 999
+
 # Manage container
 container_directories:
   - path: "{{ container_pod_home_dir }}/molecule-directory-test-to-delete"
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
     mode: "{{ container_directories_mode }}"
+    setype: container_file_t
+    unshare: true
 
 container_templates:
   - src: "nginx.default.conf.j2"
@@ -36,6 +40,7 @@ container_templates:
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
     mode: "{{ container_files_mode }}"
+    setype: container_file_t
 
 container_files:
   - src: "molecule-file-test-to-delete"
@@ -43,6 +48,8 @@ container_files:
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
     mode: "{{ container_files_mode }}"
+    setype: container_file_t
+    unshare: true
 
 updates_version: "latest"
 
@@ -66,10 +73,15 @@ container_pod_containers:
       - mountPath: /var/log/nginx:rw,z
         name: nginx-logs
 
+nginx_pod_logs_dir: "{{ container_pod_home_dir }}/logs"
+
+container_directories:
+  - path: "{{ nginx_pod_logs_dir }}"
+
 container_pod_volumes:
   - name: nginx-default-conf
     hostPath:
       path: "{{ container_pod_etc_dir }}/nginx.default.conf"
   - name: nginx-logs
     hostPath:
-      path: "{{ container_pod_logs_dir }}"
+      path: "{{ nginx_pod_logs_dir }}"

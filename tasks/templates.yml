@@ -1,0 +1,52 @@
+---
+
+- name: "{{ container_mode }} | templates | check exist"
+  when:
+    - not ansible_check_mode
+    - container_state == 'present'
+  become: true
+  ansible.builtin.stat:
+    path: "{{ template.dest }}"
+  register: __template
+                                                                                                                                                              
+- name: "{{ container_mode }} | templates | set unshare variables"
+  ansible.builtin.set_fact:
+    __unshare_user_owner: "{{ container_user_owner_service if ( template.unshare is defined and template.unshare ) else ( template.owner if template.owner is defined else container_user_owner ) }}"
+    __unshare_user_group: "{{ container_user_group_service if ( template.unshare is defined and template.unshare ) else ( template.group if template.group is defined else container_user_group ) }}"
+
+- name: "{{ container_mode }} | templates | mandatories and from outside the role"
+  when: container_state == 'present'
+  become: true
+  ansible.builtin.template:
+    src: "{{ template.src }}"
+    dest: "{{ template.dest }}"
+    mode: "{{ template.mode if template.mode is defined else container_files_mode }}"
+    owner: "{{ __unshare_user_owner }}"
+    group: "{{ __unshare_user_group }}"
+    seuser: "{{ template.seuser | default(omit) }}"
+    serole: "{{ template.serole | default(omit) }}"
+    setype: "{{ template.setype | default(omit) }}"
+  notify:
+    - Restart service
+
+- name: "{{ container_mode }} | templates | check unshare"
+  when:
+    - not ansible_check_mode
+    - container_state == 'present'
+  become: true
+  ansible.builtin.stat:
+    path: "{{ template.dest }}"
+  register: __unshare
+
+- name: "{{ container_mode }} | templates | unshare"
+  when:
+    - not ansible_check_mode
+    - container_state == 'present'
+    - __unshare.stat.exists
+    - template.unshare is defined and template.unshare
+  become: true
+  become_user: "{{ container_user_owner_service }}"
+  become_method: community.general.machinectl
+  become_exe: "sudo machinectl"
+  ansible.builtin.command: podman unshare chown "{{ container_run_as_user_owner }}:{{ container_run_as_user_group }}" "{{ template.dest }}"
+  changed_when: false
