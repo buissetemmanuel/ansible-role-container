@@ -1,30 +1,50 @@
 ---
 
-- name: "{{ container_mode }} | directories | for pod"
+- name: "{{ container_mode }} | directories | check exist | {{ directory.path }}"
+  when:
+    - not ansible_check_mode
+  become: true
+  ansible.builtin.stat:
+    path: "{{ directory.path }}"
+  register: __directory
+
+- name: "{{ container_mode }} | directories | set unshare variables"
+  ansible.builtin.set_fact:
+    __unshare_user_owner: "{{ container_user_owner_service if ( directory.unshare is defined and directory.unshare ) else ( directory.owner if directory.owner is defined else container_user_owner ) }}"
+    __unshare_user_group: "{{ container_user_group_service if ( directory.unshare is defined and directory.unshare ) else ( directory.group if directory.group is defined else container_user_group ) }}"
+
+- name: "{{ container_mode }} | directories | mandatories and from outside the role"
+  when:
+    - not ansible_check_mode
+    - ( __directory.stat.exists is defined and not __directory.stat.exists ) or ( directory.force is defined and directory.force ) or container_state == 'absent'
   become: true
   ansible.builtin.file:
     state: "{{ container_directories_state }}"
     path: "{{ directory.path }}"
     mode: "{{ directory.mode if directory.mode is defined else container_directories_mode }}"
-    owner: "{{ directory.owner }}"
-    group: "{{ directory.group }}"
-    seuser: system_u
-    serole: object_r
-    setype: container_file_t
-  loop: "{{ container_directories_mandatories + container_directories }}"
-  loop_control:
-    loop_var: directory
-    label: "{{ directory.path }}"
+    owner: "{{ __unshare_user_owner }}"
+    group: "{{ __unshare_user_group }}"
+    seuser: "{{ directory.seuser | default(omit) }}"
+    serole: "{{ directory.serole | default(omit) }}"
+    setype: "{{ directory.setype | default(omit) }}"
 
-- name: "{{ container_mode }} | directories | for services pod"
-  when: not ansible_check_mode
+- name: "{{ container_mode }} | directories | check unshare"
+  when:
+    - not ansible_check_mode
+  become: true
+  ansible.builtin.stat:
+    path: "{{ directory.path }}"
+  register: __unshare
+
+- name: "{{ container_mode }} | directories | unshare"
+  when:
+    - not ansible_check_mode
+    - container_state == 'present'
+    - __unshare.stat.exists
+    - directory.unshare is defined and directory.unshare
   become: true
   become_user: "{{ container_user_owner_service }}"
   become_method: community.general.machinectl
   become_exe: "sudo machinectl"
-  ansible.builtin.file:
-    state: "{{ container_directories_state }}"
-    path: "{{ container_pod_service_dir }}"
-    mode: "{{ container_directories_mode }}"
-    owner: "{{ container_user_owner_service }}"
-    group: "{{ container_user_group_service }}"
+  ansible.builtin.command: podman unshare chown "{{ container_run_as_user_owner }}:{{ container_run_as_user_group }}" -R "{{ directory.path }}"
+  changed_when: false

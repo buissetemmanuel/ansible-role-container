@@ -9,6 +9,35 @@
 
 - name: "{{ container_mode }} | files"
   ansible.builtin.include_tasks: files.yml
+  loop: "{{ container_files }}"
+  loop_control:
+    loop_var: file
+    label: "{{ file.src }} -> {{ file.dest }}"
+
+- name: "{{ container_mode }} | templates"
+  ansible.builtin.include_tasks: templates.yml
+  loop: "{{ container_templates_mandatories + container_templates }}"
+  loop_control:
+    loop_var: template
+    label: "{{ template.src }} -> {{ template.dest }}"
 
 - name: "{{ container_mode }} | directories"
   ansible.builtin.include_tasks: directories.yml
+  loop: "{{ container_directories_mandatories + container_directories }}"
+  loop_control:
+    loop_var: directory
+    label: "{{ directory.path }}"
+
+- name: "{{ container_mode }} | directories | services mandatories"
+  when:
+    - not ansible_check_mode
+  become: true
+  become_user: "{{ container_user_owner_service }}"
+  become_method: community.general.machinectl
+  become_exe: "sudo machinectl"
+  ansible.builtin.file:
+    state: "{{ container_directories_state }}"
+    path: "{{ container_pod_service_dir }}"
+    mode: "{{ container_directories_mode }}"
+    owner: "{{ container_user_owner_service }}"
+    group: "{{ container_user_group_service }}"
