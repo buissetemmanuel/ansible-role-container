@@ -1,63 +1,55 @@
 ---
 
-- name: "{{ container_mode }} | files | mandatories templates and from outside the role"
-  when: container_state == 'present'
-  become: true
-  ansible.builtin.template:
-    src: "{{ template.src }}"
-    dest: "{{ template.dest }}"
-    mode: "{{ template.mode if template.mode is defined else container_files_mode }}"
-    owner: "{{ template.owner }}"
-    group: "{{ template.group }}"
-    seuser: system_u
-    serole: object_r
-    setype: container_file_t
-  loop: "{{ container_templates_mandatories + container_templates }}"
-  loop_control:
-    loop_var: template
-    label: "{{ template.src }} -> {{ template.dest }}"
-  notify:
-    - Restart service
-
-- name: "{{ container_mode }} | files | services templates"
+- name: "{{ container_mode }} | files | check exist"
   when:
     - not ansible_check_mode
     - container_state == 'present'
   become: true
-  become_user: "{{ container_user_owner_service }}"
-  become_method: community.general.machinectl
-  become_exe: "sudo machinectl"
-  ansible.builtin.template:
-    src: "{{ template.src }}"
-    dest: "{{ template.dest }}"
-    mode: "{{ template.mode if template.mode is defined else container_files_mode }}"
-    owner: "{{ template.owner }}"
-    group: "{{ template.group }}"
-    seuser: system_u
-    serole: object_r
-    setype: container_file_t
-  loop: "{{ container_services_templates_mandatories }}"
-  loop_control:
-    loop_var: template
-    label: "{{ template.src }} -> {{ template.dest }}"
-  notify:
-    - Restart service
+  ansible.builtin.stat:
+    path: "{{ file.dest }}"
+  register: __file
+
+- name: "{{ container_mode }} | files | set unshare variables"
+  ansible.builtin.set_fact:
+    __unshare_user_owner: "{{ container_user_owner_service if ( file.unshare is defined and file.unshare ) else ( file.owner if file.owner is defined else container_user_owner ) }}"
+    __unshare_user_group: "{{ container_user_group_service if ( file.unshare is defined and file.unshare ) else ( file.group if file.group is defined else container_user_group ) }}"
 
 - name: "{{ container_mode }} | files | from outside the role"
-  when: container_state == 'present'
+  when:
+    - not ansible_check_mode
+    - container_state == 'present'
+    - not __file.stat.exists
   become: true
   ansible.builtin.copy:
     src: "{{ file.src }}"
     dest: "{{ file.dest }}"
     mode: "{{ file.mode if file.mode is defined else container_files_mode }}"
-    owner: "{{ file.owner }}"
-    group: "{{ file.group }}"
-    seuser: system_u
-    serole: object_r
-    setype: container_file_t
-  loop: "{{ container_files }}"
-  loop_control:
-    loop_var: file
-    label: "{{ file.src }} -> {{ file.dest }}"
+    owner: "{{ __unshare_user_owner }}"
+    group: "{{ __unshare_user_group }}"
+    seuser: "{{ file.seuser | default(omit) }}"
+    serole: "{{ file.serole | default(omit) }}"
+    setype: "{{ file.setype | default(omit) }}"
   notify:
     - Restart service
+
+- name: "{{ container_mode }} | files | check unshare"
+  when:
+    - not ansible_check_mode
+    - container_state == 'present'
+  become: true
+  ansible.builtin.stat:
+    path: "{{ file.dest }}"
+  register: __unshare
+
+- name: "{{ container_mode }} | files | unshare"
+  when:
+    - not ansible_check_mode
+    - container_state == 'present'
+    - __unshare.stat.exists
+    - file.unshare is defined and file.unshare
+  become: true
+  become_user: "{{ container_user_owner_service }}"
+  become_method: community.general.machinectl
+  become_exe: "sudo machinectl"
+  ansible.builtin.command: podman unshare chown "{{ container_run_as_user_owner }}:{{ container_run_as_user_group }}" "{{ file.dest }}"
+  changed_when: false
