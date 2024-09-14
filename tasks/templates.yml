@@ -8,7 +8,7 @@
   ansible.builtin.stat:
     path: "{{ template.dest }}"
   register: __template
-                                                                                                                                                              
+
 - name: "{{ container_mode }} | templates | set unshare variables"
   ansible.builtin.set_fact:
     __unshare_user_owner: "{{ container_user_owner_service if ( template.unshare is defined and template.unshare ) else ( template.owner if template.owner is defined else container_user_owner ) }}"

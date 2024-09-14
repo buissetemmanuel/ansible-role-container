@@ -28,16 +28,16 @@
     loop_var: directory
     label: "{{ directory.path }}"
 
-- name: "{{ container_mode }} | directories | services mandatories"                                                                                                                           
-  when:                                                                                                                                                                                       
-    - not ansible_check_mode                                                                                                                                                                  
-  become: true                                                                                                                                                                                
-  become_user: "{{ container_user_owner_service }}"                                                                                                                                           
-  become_method: community.general.machinectl                                                                                                                                                 
-  become_exe: "sudo machinectl"                                                                                                                                                               
-  ansible.builtin.file:                                                                                                                                                                       
+- name: "{{ container_mode }} | directories | services mandatories"
+  when:
+    - not ansible_check_mode
+  become: true
+  become_user: "{{ container_user_owner_service }}"
+  become_method: community.general.machinectl
+  become_exe: "sudo machinectl"
+  ansible.builtin.file:
     state: "{{ container_directories_state }}"
     path: "{{ container_pod_service_dir }}"
     mode: "{{ container_directories_mode }}"
     owner: "{{ container_user_owner_service }}" 
-    group: "{{ container_user_group_service }}" 
+    group: "{{ container_user_group_service }}"

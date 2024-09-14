@@ -30,28 +30,28 @@
     loop_var: directory
     label: "{{ directory.path }}"
 
-- name: "{{ container_mode }} | templates | services mandatories"                                                                                                                             
-  when:                                                                                                                                                                                       
-    - not ansible_check_mode                                                                                                                                                                  
-    - container_state == 'present'                                                                                                                                                            
-  become: true                                                                                                                                                                                
-  become_user: "{{ container_user_owner_service }}"                                                                                                                                           
-  become_method: community.general.machinectl                                                                                                                                                 
-  become_exe: "sudo machinectl"                                                                                                                                                               
-  ansible.builtin.template:                                                                                                                                                                   
-    src: "{{ template.src }}"                                                                                                                                                                 
-    dest: "{{ template.dest }}"                                                                                                                                                               
-    mode: "{{ template.mode if template.mode is defined else container_files_mode }}"                                                                                                         
-    owner: "{{ template.owner }}"                                                                                                                                                             
-    group: "{{ template.group }}"                                                                                                                                                             
-    seuser: "{{ template.seuser | default(omit) }}"                                                                                                                                           
-    serole: "{{ template.serole | default(omit) }}"                                                                                                                                           
-    setype: "{{ template.setype | default(omit) }}"                                                                                                                                           
-  loop: "{{ container_services_templates_mandatories }}"                                                                                                                                      
-  loop_control:                                                                                                                                                                               
-    loop_var: template                                                                                                                                                                        
-    label: "{{ template.src }} -> {{ template.dest }}"                                                                                                                                        
-  notify:                                                                                                                                                                                     
+- name: "{{ container_mode }} | templates | services mandatories"
+  when:
+    - not ansible_check_mode
+    - container_state == 'present'
+  become: true
+  become_user: "{{ container_user_owner_service }}"
+  become_method: community.general.machinectl
+  become_exe: "sudo machinectl"
+  ansible.builtin.template:
+    src: "{{ template.src }}"
+    dest: "{{ template.dest }}"
+    mode: "{{ template.mode if template.mode is defined else container_files_mode }}"
+    owner: "{{ template.owner }}"
+    group: "{{ template.group }}"
+    seuser: "{{ template.seuser | default(omit) }}"
+    serole: "{{ template.serole | default(omit) }}"
+    setype: "{{ template.setype | default(omit) }}"
+  loop: "{{ container_services_templates_mandatories }}"
+  loop_control:
+    loop_var: template
+    label: "{{ template.src }} -> {{ template.dest }}"
+  notify:
     - Restart service
 
 - name: "{{ container_mode }} | templates"

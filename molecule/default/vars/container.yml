@@ -25,6 +25,8 @@ package_packages:
 
 container_run_as_user_owner: 999
 
+nginx_pod_logs_dir: "{{ container_pod_home_dir }}/logs"
+
 # Manage container
 container_directories:
   - path: "{{ container_pod_home_dir }}/molecule-directory-test-to-delete"
@@ -33,6 +35,7 @@ container_directories:
     mode: "{{ container_directories_mode }}"
     setype: container_file_t
     unshare: true
+  - path: "{{ nginx_pod_logs_dir }}"
 
 container_templates:
   - src: "nginx.default.conf.j2"
@@ -72,11 +75,6 @@ container_pod_containers:
         name: nginx-default-conf
       - mountPath: /var/log/nginx:rw,z
         name: nginx-logs
-
-nginx_pod_logs_dir: "{{ container_pod_home_dir }}/logs"
-
-container_directories:
-  - path: "{{ nginx_pod_logs_dir }}"
 
 container_pod_volumes:
   - name: nginx-default-conf
