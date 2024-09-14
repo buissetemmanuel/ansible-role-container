@@ -25,6 +25,7 @@ package_packages:
 
 container_run_as_user_owner: 999
 
+nginx_pod_etc_dir: "{{ container_pod_home_dir }}/etc"
 nginx_pod_logs_dir: "{{ container_pod_home_dir }}/logs"
 
 # Manage container
@@ -35,11 +36,19 @@ container_directories:
     mode: "{{ container_directories_mode }}"
     setype: container_file_t
     unshare: true
+  - path: "{{ nginx_pod_etc_dir }}"
+    group: "{{ container_user_group_service }}"
+    force: true
+    setype: container_file_t
   - path: "{{ nginx_pod_logs_dir }}"
+    group: "{{ container_user_group_service }}"
+    force: true
+    setype: container_file_t
+    unshare: true
 
 container_templates:
   - src: "nginx.default.conf.j2"
-    dest: "{{ container_pod_etc_dir }}/nginx.default.conf"
+    dest: "{{ nginx_pod_etc_dir }}/nginx.default.conf"
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
     mode: "{{ container_files_mode }}"
@@ -79,7 +88,7 @@ container_pod_containers:
 container_pod_volumes:
   - name: nginx-default-conf
     hostPath:
-      path: "{{ container_pod_etc_dir }}/nginx.default.conf"
+      path: "{{ nginx_pod_etc_dir }}/nginx.default.conf"
   - name: nginx-logs
     hostPath:
       path: "{{ nginx_pod_logs_dir }}"
