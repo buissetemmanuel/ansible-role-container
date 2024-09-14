@@ -10,13 +10,13 @@ Ansible Role Container
 Goal
 --------------
 
-- manage packages if needed
-- manage users if needed
-- manage systems if needed
+- manage packages if needed with role [ansible-role-package](https://github.com/buissetemmanuel/ansible-role-package)
+- manage users if needed with role [ansible-role-user](https://github.com/buissetemmanuel/ansible-role-user)
 - 2 users include group and 1 group to access logs
 - owner of files is not the user that manage systemd service for pod
 - generate kubernetes yaml consume by `podman play kube...`
 - all update restart the service pod
+- unshare if needed
 
 Extra
 --------------
