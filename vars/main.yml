@@ -11,6 +11,7 @@ container_directories_mandatories:
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
     mode: '0755'
+    setype: container_file_r
   - path: "{{ container_pod_secret_dir }}"
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
