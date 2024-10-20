@@ -4,6 +4,7 @@
   hosts: all
   vars_files:
     - ../../defaults/main.yml
+    - vars/container.yml
     - vars/container_verify.yml
   tasks:
     - name: "Verify | set fact __container_service_name"
@@ -37,6 +38,7 @@
   hosts: all
   vars_files:
     - ../../defaults/main.yml
+    - vars/container.yml
     - vars/container_verify_updates.yml
   tasks:
     - name: Include buissetemmanuel.container

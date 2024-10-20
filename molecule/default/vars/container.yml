@@ -34,16 +34,9 @@ container_directories:
     owner: "{{ container_user_owner }}"
     group: "{{ container_user_group_service }}"
     mode: "{{ container_directories_mode }}"
-    setype: container_file_t
-    unshare: true
   - path: "{{ nginx_pod_etc_dir }}"
     group: "{{ container_user_group_service }}"
-    force: true
-    setype: container_file_t
   - path: "{{ nginx_pod_logs_dir }}"
-    group: "{{ container_user_group_service }}"
-    force: true
-    setype: container_file_t
     unshare: true
 
 container_templates:
@@ -92,3 +85,8 @@ container_pod_volumes:
   - name: nginx-logs
     hostPath:
       path: "{{ nginx_pod_logs_dir }}"
+
+#container_registries:
+#  - username: "docker_user_registry"
+#    password: "docker_user_password_registry"
+#    url: "docker.io"

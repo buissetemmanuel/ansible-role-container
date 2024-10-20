@@ -7,7 +7,7 @@ __metaclass__ = type
 
 
 DOCUMENTATION = r'''
-  module: podman_image
+  module: podman_manifest
   author:
       - BUISSET Emmanuel (@buissetemmanuel)
   short_description: Create and manipulate manifest lists and image indexes
@@ -264,6 +264,9 @@ class PodmanManifestManager(object):
                 args.append('--tls-verify')
             else:
                 args.append('--tls-verify=false')
+        if self.auth_file is not None:
+            if self.auth_file:
+                args.append('--authfile', self.auth_file)
         rc, image_data, err = self._run(args)
         if len(image_data) > 0:
             return json.loads(image_data)

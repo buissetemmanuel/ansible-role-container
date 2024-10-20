@@ -12,10 +12,31 @@
     tag: "{{ container.image_tag }}"
   register: __container_local_registry
 
+- name: "{{ container_mode }} | login to registry(ies) and create auth file"
+  when:
+    - not ansible_check_mode
+    - container_registries is defined
+  become: true
+  become_user: "{{ container_user_owner_service }}"
+  become_method: community.general.machinectl
+  become_exe: "sudo machinectl"
+  containers.podman.podman_login:
+    username: '{{ registry.username }}'
+    password: '{{ registry.password }}'
+    registry: '{{ registry.url }}'
+  loop: "{{ container_registries }}"
+  loop_control:
+    loop_var: registry
+    label: "{{ registry.url }}"
+
 - name: "{{ container_mode }} | check images exists on remote registry"
   when:
     - not ansible_check_mode
     - not __container_local_registry.image_exists
+  become: true
+  become_user: "{{ container_user_owner_service }}"
+  become_method: community.general.machinectl
+  become_exe: "sudo machinectl"
   podman_manifest:
     name: "{{ container.image_name }}"
     tag: "{{ container.image_tag }}"

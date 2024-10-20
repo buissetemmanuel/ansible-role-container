@@ -46,3 +46,8 @@ container_pod_containers: []
 
 # volume on the host that can be used in containers ('container_pod_containers')
 container_pod_volumes: []
+
+# consume registry with authentification, don't forget that parameters are mutually exclusive: auth_file|username, auth_file|password
+# container_registry_username: ~
+# container_registry_password: ~
+# container_registry_auth_file: ~
