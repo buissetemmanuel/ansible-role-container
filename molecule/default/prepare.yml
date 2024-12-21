@@ -5,6 +5,14 @@
   vars_files:
     - vars/prepare.yml
   tasks:
+    - name: Install python3-libdnf5
+      become: true
+      ansible.builtin.command: dnf install python3-libdnf5 -y
+
+#    - name: Install slirp4netns
+#      become: true
+#      ansible.builtin.command: dnf install slirp4netns -y
+
     - name: Include buissetemmanuel.package
       ansible.builtin.include_role:
         name: package

@@ -51,3 +51,6 @@ container_pod_volumes: []
 # container_registry_username: ~
 # container_registry_password: ~
 # container_registry_auth_file: ~
+
+# container network mode https://docs.podman.io/en/v4.2/markdown/podman-play-kube.1.html#network-mode-net
+container_network_mode: slirp4netns

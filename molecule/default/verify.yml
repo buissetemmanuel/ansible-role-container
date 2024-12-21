@@ -34,6 +34,17 @@
       register: container_response
       failed_when: "'{{ updates_version }}' not in container_response.content"
 
+    - name: "Verify | check network slirp4netns"
+      become: true
+      become_user: "{{ container_user_owner_service }}"
+      become_method: community.general.machinectl
+      become_exe: "sudo machinectl"
+      containers.podman.podman_container_exec:
+        name: container_pod-container_name_a
+        command: cat /etc/hosts
+      register: __podman_network
+      failed_when: "'host.containers.internal' not in __podman_network.stdout"
+
 - name: Verify updates
   hosts: all
   vars_files:

@@ -35,6 +35,8 @@ container_services_templates_mandatories:
     mode: "{{ container_files_mode }}"
 
 container_packages_mandatories:
+  - python3-libdnf5
+  - slirp4netns
   - systemd-container
   - acl
   - iptables-nft

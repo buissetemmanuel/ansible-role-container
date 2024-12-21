@@ -4,7 +4,7 @@ Description={{ container_pod_name }} Podman Container
 [Service]
 Type=forking
 ExecStartPre=-/usr/bin/podman pod rm -f {{ container_pod_name }}
-ExecStart=/usr/bin/podman play kube {{ container_pod_home_dir }}/{{ container_pod_name }}.yml
+ExecStart=/usr/bin/podman play kube --network={{ container_network_mode }} {{ container_pod_home_dir }}/{{ container_pod_name }}.yml
 ExecReload=-/usr/bin/podman pod stop {{ container_pod_name }}
 ExecReload=-/usr/bin/podman pod rm -f {{ container_pod_name }}
 ExecStop=-/usr/bin/podman pod rm -f {{ container_pod_name }}

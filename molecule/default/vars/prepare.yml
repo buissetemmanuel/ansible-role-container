@@ -19,6 +19,8 @@ user_users:
     groups: container_user_group_logs
 
 package_packages:
+  - {package: python3-libdnf5}
+  - {package: slirp4netns}
   - {package: systemd-container}
   - {package: acl}
   - {package: iptables-nft}
