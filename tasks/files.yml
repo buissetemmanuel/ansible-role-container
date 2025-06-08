@@ -1,6 +1,6 @@
 ---
 
-- name: "{{ container_mode }} | files | check exist"
+- name: "{{ container_mode }} | files | check exist | {{ file.dest }}"
   when:
     - not ansible_check_mode
     - container_state == 'present'
