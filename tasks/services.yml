@@ -7,9 +7,6 @@
 - name: "{{ container_mode }} | services | pod | check service file exist"
   when: not ansible_check_mode
   become: true
-  become_user: "{{ container_user_owner_service }}"
-  become_method: community.general.machinectl
-  become_exe: "sudo machinectl"
   ansible.builtin.stat:
     path: "{{ container_pod_service_dir }}/{{ container_pod_name }}.service"
   register: __service
@@ -34,7 +31,10 @@
   delay: 10
 
 - name: "{{ container_mode }} | services | podman system reset --force"
-  when: container_state == 'absent'
+  when:
+    - not ansible_check_mode
+    - container_state == 'absent'
+    - __service.stat.exists
   become: true
   become_user: "{{ container_user_owner_service }}"
   become_method: community.general.machinectl
