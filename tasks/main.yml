@@ -1,7 +1,7 @@
 ---
 
 - name: Check OS-specific variables
-  set_fact:
+  ansible.builtin.set_fact:
     os_vars_file: >-
       {{ lookup(
            'first_found',
