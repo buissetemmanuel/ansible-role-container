@@ -1,0 +1,7 @@
+---
+
+container_packages_mandatories:
+  - slirp4netns
+  - systemd-container
+  - acl
+  - podman
