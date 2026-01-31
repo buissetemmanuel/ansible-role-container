@@ -1,13 +1,13 @@
 ---
 
-- name: "{{ container_mode }} | check images"
-  ansible.builtin.include_tasks: asserts_image.yml
-  loop: "{{ container_pod_containers }}"
-  loop_control:
-    loop_var: container
-
 - name: "{{ container_mode }} | check packages"
   ansible.builtin.include_tasks: asserts_package.yml
   loop: "{{ container_packages_mandatories }}"
   loop_control:
     loop_var: package
+
+- name: "{{ container_mode }} | check images"
+  ansible.builtin.include_tasks: asserts_image.yml
+  loop: "{{ container_pod_containers }}"
+  loop_control:
+    loop_var: container
