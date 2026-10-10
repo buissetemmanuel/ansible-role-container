@@ -9,5 +9,6 @@ roles:
     name: user
 
 collections:
+  - community.general
   - ansible.netcommon
   - containers.podman
