@@ -86,7 +86,7 @@ container_pod_volumes:
     hostPath:
       path: "{{ nginx_pod_logs_dir }}"
 
-#container_registries:
-#  - username: "docker_user_registry"
-#    password: "docker_user_password_registry"
-#    url: "docker.io"
+# container_registries:
+#   - username: "docker_user_registry"
+#     password: "docker_user_password_registry"
+#     url: "docker.io"

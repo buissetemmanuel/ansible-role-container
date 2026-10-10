@@ -1,25 +1,17 @@
 ---
 
-- name: Check OS-specific variables
-  ansible.builtin.set_fact:
-    os_vars_file: >-
-      {{ lookup(
-           'first_found',
-           {
-             'files': [
-               ansible_distribution ~ '.yml',
-               ansible_os_family ~ '.yml'
-             ],
-             'paths': [
-               role_path ~ '/vars'
-             ]
-           },
-           errors='ignore'
-         ) }}
+- name: Load default variables
+  ansible.builtin.include_vars: vars/main.yml
 
 - name: Load OS-specific variables
-  ansible.builtin.include_vars: "{{ os_vars_file }}"
-  when: os_vars_file | length > 0
+  ansible.builtin.include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_facts['distribution'] }}.yml"
+        - "{{ ansible_facts['os_family'] }}.yml"
+      paths:
+        - "../vars"
+      skip: true
 
 - name: Install
   when: container_state == 'present'

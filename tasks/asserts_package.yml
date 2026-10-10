@@ -10,4 +10,4 @@
     - 'package | string not in ansible_facts.packages'
   become: true
   ansible.builtin.fail:
-    msg: "The package '{{ package}}' must be installed!"
+    msg: "The package '{{ package }}' must be installed!"
