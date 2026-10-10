@@ -4,6 +4,8 @@ dependency:
   options:
     role-file: molecule/default/collections.yml
     requirements-file: molecule/default/collections.yml
+    extra-args:
+      - "--force"
 driver:
   name: vagrant
   provider:
